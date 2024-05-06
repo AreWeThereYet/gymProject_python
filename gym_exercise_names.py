@@ -1,10 +1,9 @@
 #!/usr/bin/env python
-
+import json
 import logging
 import traceback
-
+import postgres_routines
 import cgi_entry_handler as cgi
-from postgres_routines import insert_exercise_details
 
 
 ##########################################################################
@@ -14,29 +13,23 @@ from postgres_routines import insert_exercise_details
 def main():
     logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s')
-
     try:
-        if not cgi.is_post():
-            logging.error("Not invoked as POST")
+        if not cgi.is_get():
+            logging.error("Not invoked as GET")
             print("Status: 400", "\n\n")
             return
 
-        if not cgi.is_application_json():
-            logging.error("Not invoked with CONTENT_TYPE application/json")
-            print("Status: 400", "\n\n")
-            return
+        logging.info('retrieving db data')
 
-        values = cgi.convert_json_to_python()
-        insert_exercise_details(values)
-        logging.info("success inserting exercise")
-        print('Content-Type: application/json\n\n')  # Until I figure out empty response, this will do
-        return "{}"  # ditto above
-
+        print('Content-Type: application/json\n\n')
+        rows = postgres_routines.get_exercise_names()
+        json_result = json.dumps(rows)
+        logging.debug("Returning back json string: " + json_result)
+        print(json_result)
+        return
     except Exception as e:
-        logging.error("Insert Failed")
         logging.error(traceback.format_exc())
         print("Status: 400", "\n\n")
-        return
 
 
 if __name__ == '__main__':

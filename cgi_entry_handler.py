@@ -1,50 +1,41 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import json
 import logging
-import logging_helper
-import date_time_helper as dth
 
-from entry_handler import Entry_Handler
 from urllib.parse import parse_qs
 
-def main(): 
+logging = logging.getLogger(__name__)  # something else should have initialized it
 
-    logger = logging_helper.get_common_logger()
 
-    logger.info(dth.now_with_delimiter(' ') + 'In cgi_entry_handler main ')
+def is_application_json():
+    content_type = os.environ.get('CONTENT_TYPE', '')
+    logging.info('CONTENT_TYPE ' + content_type)
+    return "application/json" == content_type
 
+
+def is_post():
     http_method = os.environ.get('REQUEST_METHOD', '')
-    query_string = os.environ.get('QUERY_STRING', '') 
-    converted_query_values = parse_qs(query_string) 
+    return http_method == 'POST'
 
-    if "debug" in parsed_values:
-        logger.setLevel(logging.DEBUG)
-        
-    logger.debug(dth.now_with_delimiter(' ') + str(parsed_values))
 
-    if http_method not in {'GET','DELETE','POST'}:
-        print("Status: 400\n")
-        logger.error(dth.now_with_delimiter(' ') + 'No valid HTTP method used GET/DELETE/POST')
-        return
+def is_get():
+    http_method = os.environ.get('REQUEST_METHOD', '')
+    return http_method == 'GET'
 
-    if "POST" == http_method:
+
+def get_query_values():
+    params = parse_qs(os.environ.get('QUERY_STRING', ''))
+    logging.debug(str(params))
+    return params
+
+
+def convert_json_to_python():
+    if is_post():
         content_len = os.environ.get('CONTENT_LENGTH', '0')
         body = sys.stdin.read(int(content_len))
-        converted_json_body = json.loads(body) 
-        logger.debug(dth.now_with_delimiter(' ') + 'json received and decoded: ' + json.dumps(converted_json_body))
-
-    try:
-        entry_handler = Entry_Handler(logger) 
-        # .run_method("GET","retrieve_exercises",test1_query_params,"") 
-        entry_handler.run_method(http_method, converted_query_values, converted_json_body)
-
-    except Exception as ex:
-        logger.error(dth.now_with_delimiter(' ') + 'Big Error')
-        logger.error(dth.now_with_delimiter(' ') + str(ex))
-        print("Status: 400\n")
-
-
-if __name__ == '__main__':
-    main()
+        python_values = json.loads(body, strict=False)
+        logging.debug('returning: ' + str(python_values))
+        return python_values

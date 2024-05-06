@@ -1,47 +1,71 @@
 #!/usr/bin/env python
 
-import sys
-import os
 import json
-import logging
-import logging_helper
-import date_time_helper as dth
-from urllib.parse import parse_qs
-from datetime import date
-from db_routines_exercise_performed import get_previous_exercises
 import traceback
+import cgi_entry_handler as cgi
+import logging
+
+from constants import ALL_EXERCISES
+from postgres_routines import get_previous_exercises
 
 
-def main(): 
+##########################################################################
+# Entry Point so try/catch around everything and logging starts here too #
+##########################################################################
 
-    logger = logging_helper.get_common_logger()
+def main():
+    logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
+                        format='%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s')
 
-    file_name = __file__.rsplit('/', 1)
-    file_path = __file__ 
-    file_list = file_path.rsplit(os.sep)
-    file_name = file_list[-1]
-
-    success = False
-
-    query_string = os.environ.get('QUERY_STRING', '') 
-    converted_query_values = parse_qs(query_string) 
-    logger.info(dth.now_with_delimiter(' ') + file_name + ' query params: ' + str(converted_query_values))
-    
-    rows = {}
     try:
-        exercise_id = converted_query_values['exercise_id'][0]
-        rows = get_previous_exercises(logger, exercise_id)
-        logger.info(dth.now_with_delimiter(' ') + file_name + 'sql data from get_previous_exercises is:' + str(rows))
-        success = True
+        query_params = cgi.get_query_values()
+        exercise_id = query_params["id"][0]
+        logging.info("Exercise id: %s", exercise_id)
+        rows = get_previous_exercises(exercise_id)
+        for exercise_group in ALL_EXERCISES:
+            logging.info(str(exercise_group))
+            if exercise_id in exercise_group['exercise_ids']:
+                break
+        logging.debug('found exercise group: ' + str(exercise_group))
+        result = add_formatted_data(rows, exercise_group)
+        json_result = json.dumps(result)
+        logging.debug("json return is %s",json_result)
+        # print("Status: 200", "\n\n")
+        print('Content-Type: application/json\n\n')
+        print(json_result)
+        return
     except Exception as e:
-        logger.error(dth.now_with_delimiter(' ') + file_name + traceback.format_exc())
-        
-    print('Content-Type: application/json\n\n')
-    response = { 'success' : success  , 'reason' : "" , 'data': rows}
-    toJson = json.dumps(response)
-    logger.info(dth.now_with_delimiter(' ') + file_name + 'sending back json string:' + toJson)
-    print(toJson)
-       
+        logging.error(traceback.format_exc())
+        print("Status: 400", "\n\n")
+        return
+
+
+def add_formatted_data(rows, exercise_group):
+    converted_rows = []
+    result = {'headers': exercise_group['data_table_headers'], 'data': converted_rows}
+    for row in rows:
+        if exercise_group["id"] == 4:
+            create_stair_master_field(row)
+        if exercise_group["id"] == 3:
+            create_cardio_field(row)
+        logging.info(str(row))
+        one_converted_row = []
+        converted_rows.append(one_converted_row)
+        for field in exercise_group['data_table_fields']:
+            one_converted_row.append(row[field])
+
+    logging.debug('return converted rows (py objects) ' + str(result))
+    return result
+
+
+def create_stair_master_field(row):
+    row['duration'] = row['stairMasterMinutes'] + ':' + row['stairMasterSeconds']
+
+
+def create_cardio_field(row):
+    row['miles'] = row['cardioMilesMajor'] + '.' + row['cardioMilesMinor']
+    row["duration"] = row['cardioMinutes'] + ':' + row['cardioSeconds']
+
 
 if __name__ == '__main__':
     main()
