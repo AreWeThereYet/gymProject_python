@@ -5,17 +5,18 @@ import logging
 
 logging = logging.getLogger(__name__)  # something else should have initialized it
 
-
-def get_previous_exercises(exercise_id):
-    logging.info("get_previous_exercises: " + exercise_id)
-
-    # Establish a connection to the PostgreSQL database
-    conn = psycopg2.connect(
+conn = psycopg2.connect(
         dbname="dbqiycouugxg3r",
         user="updqeo4pn0axa",
         password="j411@b@&cocg",
         host="localhost"
     )
+
+
+def get_previous_exercises(exercise_id):
+    logging.info("get_previous_exercises: " + exercise_id)
+
+    # Establish a connection to the PostgreSQL database
 
     # Create a cursor object to execute SQL queries
     cur = conn.cursor()
@@ -42,14 +43,6 @@ def get_previous_exercises(exercise_id):
 
 
 def get_exercise_names():
-
-    # Establish a connection to the PostgreSQL database
-    conn = psycopg2.connect(
-        dbname="dbqiycouugxg3r",
-        user="updqeo4pn0axa",
-        password="j411@b@&cocg",
-        host="localhost"
-    )
 
     # Create a cursor object to execute SQL queries
     cur = conn.cursor()
@@ -78,13 +71,6 @@ def get_exercise_names():
 
 
 def insert_exercise_details(exercise_details):
-    # Establish a connection to the PostgreSQL database
-    conn = psycopg2.connect(
-        dbname="dbqiycouugxg3r",
-        user="updqeo4pn0axa",
-        password="j411@b@&cocg",
-        host="localhost"
-    )
 
     session_id = exercise_details['session']
 

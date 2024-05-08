@@ -30,7 +30,6 @@ def main():
         result = add_formatted_data(rows, exercise_group)
         json_result = json.dumps(result)
         logging.debug("json return is %s",json_result)
-        # print("Status: 200", "\n\n")
         print('Content-Type: application/json\n\n')
         print(json_result)
         return

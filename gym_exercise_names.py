@@ -10,6 +10,11 @@ import cgi_entry_handler as cgi
 # Entry Point so try/catch around everything and logging starts here too #
 ##########################################################################
 
+def add_additional_dropdowns(rows):
+    rows.append((0, 'Bearer Token'))
+    rows.append((1, 'Locker Number'))
+
+
 def main():
     logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s')
@@ -23,6 +28,7 @@ def main():
 
         print('Content-Type: application/json\n\n')
         rows = postgres_routines.get_exercise_names()
+        add_additional_dropdowns(rows)
         json_result = json.dumps(rows)
         logging.debug("Returning back json string: " + json_result)
         print(json_result)
