@@ -35,11 +35,11 @@ SIMPLE_REP_EXERCISES = {
     'data_table_headers': ['Datetime', "Reps"], 'data_table_fields': ['utcInSeconds', "simpleRepsReps"],
     'id': 5
 }
-ADMIN_TASKS = {
+GENERAL_ONE_LINERS = {
     "div_info": {"div_name": 'oneLineGeneralDiv', "fields": ['oneLine']},
     "exercise_ids": ["0", "1"],
     'data_table_headers': ['Datetime', "Value"], 'data_table_fields': ['utcInSeconds', "oneLine"],
     'id': 6
 }
-ALL_EXERCISES = [ADMIN_TASKS, WEIGHT_EXERCISES, OWN_BODY_RESISTENCE_EXERCISES, CARDIO_EXERCISES, STAIR_MASTER_EXERCISES,
-                 SIMPLE_REP_EXERCISES]
+ALL_EXERCISES = [GENERAL_ONE_LINERS, WEIGHT_EXERCISES, OWN_BODY_RESISTENCE_EXERCISES, CARDIO_EXERCISES,
+                 STAIR_MASTER_EXERCISES, SIMPLE_REP_EXERCISES]
