@@ -1,6 +1,6 @@
 WEIGHT_EXERCISES = {
     "div_info": {'div_name': 'weightsDiv', "fields": ['weightsWeight', 'weightsReps', 'weightsDetails']},
-    "exercise_ids": ["37", "39", "40", "41", "42", "46", "48", "49"],
+    "exercise_ids": ["37", "39", "40", "41", "42", "46", "48", "49", "50"],
     'data_table_headers': ['Datetime', 'Amount', 'Reps'],
     'data_table_fields': ['utcInSeconds', 'weightsWeight', 'weightsReps'],
     'id': 1

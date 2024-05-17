@@ -24,10 +24,11 @@ SET default_tablespace = '';
 -- TOC entry 199 (class 1259 OID 57639)
 -- Name: exercise_name; Type: TABLE; Schema: public; Owner: updqeo4pn0axa
 --
-
+DROP TABLE public.exercise_name;
 CREATE TABLE public.exercise_name (
     id integer NOT NULL,
-    name character varying(255)
+    name character varying(255),
+    display_order integer NOT NULL
 );
 
 
@@ -37,7 +38,7 @@ ALTER TABLE public.exercise_name OWNER TO updqeo4pn0axa;
 -- TOC entry 198 (class 1259 OID 57637)
 -- Name: exercise_name_id_seq; Type: SEQUENCE; Schema: public; Owner: updqeo4pn0axa
 --
-
+DROP SEQUENCE public.exercise_name_id_seq;
 CREATE SEQUENCE public.exercise_name_id_seq
     AS integer
     START WITH 1
@@ -72,21 +73,24 @@ ALTER TABLE ONLY public.exercise_name ALTER COLUMN id SET DEFAULT nextval('publi
 -- Data for Name: exercise_name; Type: TABLE DATA; Schema: public; Owner: updqeo4pn0axa
 --
 
-INSERT INTO public.exercise_name (id, name) VALUES (36, 'Treadmill');
-INSERT INTO public.exercise_name (id, name) VALUES (37, 'Lying Bench Dumbbell');
-INSERT INTO public.exercise_name (id, name) VALUES (38, 'Lying Bench Leg Raises');
-INSERT INTO public.exercise_name (id, name) VALUES (39, 'Standing Dumbbell Cross Body Rise');
-INSERT INTO public.exercise_name (id, name) VALUES (40, 'Standing Barbell Overhead Press');
-INSERT INTO public.exercise_name (id, name) VALUES (41, 'Standing Barbell Scissor');
-INSERT INTO public.exercise_name (id, name) VALUES (42, 'Standing Barbell Curl ');
-INSERT INTO public.exercise_name (id, name) VALUES (43, 'Stairs (Climb Artis)');
-INSERT INTO public.exercise_name (id, name) VALUES (44, 'Technogym Assisted Pull Up');
-INSERT INTO public.exercise_name (id, name) VALUES (45, 'Technogym Assisted Tricep Dip');
-INSERT INTO public.exercise_name (id, name) VALUES (47, 'Bike');
-INSERT INTO public.exercise_name (id, name) VALUES (48, 'Technogym Chest Press');
-INSERT INTO public.exercise_name (id, name) VALUES (49, 'Technogym Lat Cable Station Bar Pull Down');
-INSERT INTO public.exercise_name (id, name) VALUES (46, 'Technogym Lat machine');
-INSERT INTO public.exercise_name (id, name) VALUES (100, 'Locker Number');
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (47, 'Bike', 1);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (37, 'Lying Bench Dumbbell', 2);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (38, 'Lying Bench Leg Raises', 3);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (50, 'Lying Bench Press Barbell', 4);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (43, 'Stairs (Climb Artis)', 5);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (42, 'Standing Barbell Curl ', 6);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (40, 'Standing Barbell Overhead Press', 7);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (41, 'Standing Barbell Scissor', 8);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (39, 'Standing Dumbbell Cross Body Rise', 9);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (44, 'Technogym Assisted Pull Up', 10);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (45, 'Technogym Assisted Tricep Dip', 11);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (48, 'Technogym Chest Press', 12);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (49, 'Technogym Lat Cable Station Bar Pull Down', 13);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (46, 'Technogym Lat machine', 14);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (36, 'Treadmill', 15);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (1, 'Locker Number',100);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (0, 'Bearer Token', 101);
+
 
 
 --

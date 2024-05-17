@@ -5,9 +5,21 @@ import sys
 import json
 import logging
 
+
 from urllib.parse import parse_qs
 
 logging = logging.getLogger(__name__)  # something else should have initialized it
+
+
+def dump_os_variables():
+    for key in os.environ:
+        logging.info('{}:{}'.format(key, os.environ[key]))
+
+
+def has_valid_token():
+    token = os.environ["HTTP_X_AUTHORIZATION"]
+    return token == 'Bearer 20242024'
+    return True
 
 
 def is_application_json():

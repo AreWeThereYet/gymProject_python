@@ -58,12 +58,12 @@ def add_formatted_data(rows, exercise_group):
 
 
 def create_stair_master_field(row):
-    row['duration'] = row['stairMasterMinutes'] + ':' + row['stairMasterSeconds']
+    row['duration'] = row['stairMasterMinutes'] + 'm ' + row['stairMasterSeconds'] + 's'
 
 
 def create_cardio_field(row):
     row['miles'] = row['cardioMilesMajor'] + '.' + row['cardioMilesMinor']
-    row["duration"] = row['cardioMinutes'] + ':' + row['cardioSeconds']
+    row["duration"] = row['cardioMinutes'] + 'm ' + row['cardioSeconds'] + 's'
 
 
 if __name__ == '__main__':

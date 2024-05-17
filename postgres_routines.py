@@ -39,7 +39,7 @@ def get_exercise_names():
 
     cur = conn.cursor()
 
-    sql = "SELECT id,name FROM public.exercise_name order by name"
+    sql = "SELECT id,name FROM public.exercise_name order by display_order"
     logging.info(sql)
     cur.execute(sql)
     rows = cur.fetchall()
