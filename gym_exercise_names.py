@@ -23,6 +23,11 @@ def main():
 
         print('Content-Type: application/json\n\n')
         rows = postgres_routines.get_exercise_names()
+        logging.debug(rows)
+        # add locker and bearer manually
+        rows.append([1, 'Locker'])
+        rows.append([0, 'Bearer'])
+
         json_result = json.dumps(rows)
         logging.debug("Returning back json string: " + json_result)
         print(json_result)

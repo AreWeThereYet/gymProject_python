@@ -18,6 +18,7 @@ def dump_os_variables():
 
 def has_valid_token():
     token = os.environ["HTTP_X_AUTHORIZATION"]
+
     return token == 'Bearer 20242024'
     return True
 

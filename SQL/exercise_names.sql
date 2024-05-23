@@ -88,6 +88,9 @@ INSERT INTO public.exercise_name (id, name, display_order) VALUES (48, 'Technogy
 INSERT INTO public.exercise_name (id, name, display_order) VALUES (49, 'Technogym Lat Cable Station Bar Pull Down', 13);
 INSERT INTO public.exercise_name (id, name, display_order) VALUES (46, 'Technogym Lat machine', 14);
 INSERT INTO public.exercise_name (id, name, display_order) VALUES (36, 'Treadmill', 15);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (51, 'Technogym Pulldown', 14);
+INSERT INTO public.exercise_name (id, name, display_order) VALUES (52, 'Technogym Pulley', 14);
+
 INSERT INTO public.exercise_name (id, name, display_order) VALUES (1, 'Locker Number',100);
 INSERT INTO public.exercise_name (id, name, display_order) VALUES (0, 'Bearer Token', 101);
 
