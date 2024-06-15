@@ -33,7 +33,7 @@ SIMPLE_REP_EXERCISES = {
     "div_info": {"div_name": 'simpleRepsDiv', "fields": ['simpleRepsReps', 'simpleRepsDetails']},
     "exercise_ids": ["38"],
     'data_table_headers': ['Datetime', "Reps"], 'data_table_fields': ['utcInSeconds', "simpleRepsReps"],
-    'id': 5
+        'id': 5
 }
 GENERAL_ONE_LINERS = {
     "div_info": {"div_name": 'oneLineGeneralDiv', "fields": ['oneLine']},

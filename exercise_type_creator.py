@@ -2,6 +2,9 @@ import json
 import logging
 import traceback
 
+from postgres_routines import insert_exercise_type
+
+
 # from constants import ALL_EXERCISES
 # from postgres_routines import insert_exercise_type
 
@@ -28,8 +31,8 @@ def main():
         session_summary['prefix_to_fields'] = ['datetime', 'lbs: ', 'reps: ']
 
         mobile_summary = {}
-        mobile_summary['extract_fields'] = ['utcInSeconds', 'somethingelse', 'another one']
-        mobile_summary['prefix_to_fields'] = ['datetime', 'lbs: ', 'reps: ']
+        mobile_summary['extract_fields'] = ['utcInSeconds', 'xxxx', 'xxxx']
+        mobile_summary['prefix_to_fields'] = ['datetime', 'xxxx: ', 'xxxx: ']
 
         oneType['report_fields'] = {}
         oneType['report_fields']['mobile_summary'] = mobile_summary
@@ -42,11 +45,9 @@ def main():
         # "session_summary": {"extract_fields": ["utcInSeconds", "weightsWeight", "weightsReps"],
         # "prefix_to_fields": ["datetime", "lbs: ", "reps: "]}}}
 
+        insert_exercise_type(oneType)
+        logging.info("success")
 
-
-        # insert_exercise_type(newItem)
-
-        print()
         return
     except Exception as e:
         logging.error(traceback.format_exc())

@@ -5,7 +5,9 @@ import logging
 
 logging = logging.getLogger(__name__)  # something else should have initialized it
 
-conn = psycopg2.connect(
+
+def get_connection():
+    return psycopg2.connect(
         dbname="dbqiycouugxg3r",
         user="updqeo4pn0axa",
         password="j411@b@&cocg",
@@ -15,6 +17,8 @@ conn = psycopg2.connect(
 
 def get_previous_exercises(exercise_id):
     logging.info("get_previous_exercises: " + exercise_id)
+
+    conn = get_connection()
 
     cur = conn.cursor()
 
@@ -36,6 +40,7 @@ def get_previous_exercises(exercise_id):
 
 
 def get_exercise_names():
+    conn = get_connection()
 
     cur = conn.cursor()
 
@@ -55,6 +60,7 @@ def get_exercise_names():
 
 
 def insert_exercise_details(exercise_details):
+    conn = get_connection()
 
     session_id = exercise_details['session']
 
@@ -69,6 +75,29 @@ def insert_exercise_details(exercise_details):
         exercise_details['utcInSeconds'],
         exercise_details['exerciseId'],
         psycopg2.extras.Json(exercise_details)
+    )
+                )
+
+    conn.commit()
+
+    cur = conn.cursor()
+
+    cur.close()
+    conn.close()
+
+
+def insert_exercise_type(exercise_type_details):
+    conn = get_connection()
+
+    cur = conn.cursor()
+
+    insert_query = sql.SQL(
+        "INSERT INTO exercise_type (id, exercise_type_name, report_page_fields) VALUES (%s, %s, %s, %s)")
+
+    cur.execute(insert_query, (
+        exercise_type_details['id'],
+        exercise_type_details['name'],
+        exercise_type_details
     )
                 )
 

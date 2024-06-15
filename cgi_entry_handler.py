@@ -9,7 +9,7 @@ import logging
 from urllib.parse import parse_qs
 
 logging = logging.getLogger(__name__)  # something else should have initialized it
-
+# example logging.info('{}:{}'.format(key, os.environ[key]))
 
 def dump_os_variables():
     for key in os.environ:

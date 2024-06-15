@@ -2,9 +2,10 @@
 
 import logging
 import traceback
+import json
 
 import cgi_entry_handler as cgi_helper
-from postgres_routines import insert_exercise_details
+from postgres_routines import insert_exercise_details, get_previous_exercises
 
 
 ##########################################################################
@@ -31,10 +32,14 @@ def main():
             return
 
         values = cgi_helper.convert_json_to_python()
+        logging.debug(type(values))
         insert_exercise_details(values)
+        rows = get_previous_exercises(values['exerciseId'])
+        json_result = json.dumps(rows)
+        logging.debug("json return is %s", json_result)
+        print('Content-Type: application/json\n\n')
+        print(json_result)
         logging.info("success inserting exercise")
-        print('Content-Type: application/json\n\n')  # Until I figure out empty response, this will do
-        return "{}"  # ditto above
 
     except Exception as e:
         logging.error("Insert Failed")
