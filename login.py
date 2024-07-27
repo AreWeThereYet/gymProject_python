@@ -4,7 +4,6 @@ import logging
 import traceback
 
 import cgi_entry_handler as cgi_helper
-from postgres_routines import insert_exercise_details, get_previous_exercises
 
 
 ##########################################################################
@@ -15,28 +14,17 @@ def main():
     logging.basicConfig(filename='logfile.txt', level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(message)s')
 
+    logging.info("validating login info...")
+
     try:
         if not cgi_helper.has_valid_token():
+            logging.info("sending back 403")
             print("Status: 403", "\n\n")
             return
 
-        if not cgi_helper.is_post():
-            logging.error("Not invoked as POST")
-            print("Status: 400", "\n\n")
-            return
-
-        if not cgi_helper.is_application_json():
-            logging.error("Not invoked with CONTENT_TYPE application/json")
-            print("Status: 400", "\n\n")
-            return
-
-        values = cgi_helper.convert_json_to_python()
-        logging.debug(type(values))
-        insert_exercise_details(values)
-        print('Content-Type: application/json\n\n')
-        print("{}")
-
-        logging.info("success inserting exercise")
+        logging.info("successful login")
+        print('Content-Type: application/json\n\n')  # Until I figure out empty response, this will do
+        return "{}"
 
     except Exception as e:
         logging.error("Insert Failed")

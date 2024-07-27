@@ -22,7 +22,7 @@ def get_previous_exercises(exercise_id):
 
     cur = conn.cursor()
 
-    sql = "SELECT exercise_details FROM public.exercise_performed WHERE exercise_id = %s ORDER BY id DESC LIMIT 3"
+    sql = "SELECT exercise_details FROM public.exercise_performed WHERE exercise_id = %s ORDER BY id DESC LIMIT 20"
     cur.execute(sql, (exercise_id,))
     rows = cur.fetchall()
     result = []
@@ -59,7 +59,7 @@ def get_exercise_names():
     return rows
 
 
-def insert_exercise_details(exercise_details):
+def insert_exercise_details(exercise_details): # Expects Python Object not json string
     conn = get_connection()
 
     session_id = exercise_details['session']
@@ -102,8 +102,63 @@ def insert_exercise_type(exercise_type_details):
                 )
 
     conn.commit()
+    cur.close()
+    conn.close()
+
+
+# Return a row so it's a tuple like (243,).  Therefore calling routine must get the first value [0]
+def get_highest_exercise_performed_entry():
+    conn = get_connection()
+    cur = conn.cursor()
+
+    sql = "SELECT max(id) max_id FROM public.exercise_performed "
+    logging.info(sql)
+    cur.execute(sql)
+    tuple = cur.fetchone()
+    logging.info("returning highest value " + str(tuple))
+
+    cur.close()
+    conn.close()
+
+    return tuple
+
+
+def delete_after_id_exercise_performed_entries(after_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    sql = "DELETE FROM public.exercise_performed WHERE id > %s"
+    logging.info(sql)
+    cur.execute(sql, (after_id,)) # Note the force to tuple
+    rowcount = cur.rowcount
+
+    logging.info("rows deleted value " + str(rowcount))
+
+    cur.close()
+    conn.commit()
+    conn.close()
+    return rowcount
+
+def get_last_exercises_performed():
+    sql = """ 
+    SELECT ep.id,utc_seconds,name 
+    FROM public.exercise_performed ep, public.exercise_name en 
+    WHERE ep.exercise_id = en.id 
+    ORDER BY ep.id DESC LIMIT 100
+    """
+    conn = get_connection()
+
+    cur = conn.cursor()
+
+    logging.info(sql)
+    cur.execute(sql)
+    rows = cur.fetchall()
+
+    logging.info("returning array " + str(rows))
 
     cur = conn.cursor()
 
     cur.close()
     conn.close()
+
+    return rows

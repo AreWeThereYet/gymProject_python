@@ -1,54 +1,57 @@
-from entry_handler import Entry_Handler
-import logging_helper
-import logging
-from database_handler import Database_Handler
+import traceback
 import json
+from postgres_routines import *
+from logging_helper import get_common_logger
 
-logger = logging_helper.get_common_logger()
-logger.setLevel(logging.DEBUG)
 
-database_runner = Database_Handler(logger)
+def insert_exercise_performed_test():
+    logging.info("Begin")
+    exercise_performed = """
+    {"session": 1111111, "exerciseId": "46", "weightsReps": "10", "utcInSeconds": 1721091259, "weightsWeight": "80", "weightsDetails": ""}
+    """
+    values = json.loads(exercise_performed, strict=False)
+    logging.info("converted from json, python object is " + str(values))
+    insert_exercise_details(values)
+    logging.info("End")
 
-returned_tuple = database_runner.get_all_exercises()
-if True == returned_tuple[0]:
-    json_string = returned_tuple[1]
-    print("get_all_exercises() Success and exercises are: ",json_string)
-else:
-    print("get_all_exercises() failed.  exiting")
-    exit(1)
 
-returned_tuple = database_runner.insert_session()
-if True == returned_tuple[0]:
-    dict_value = json.loads(returned_tuple[1])
-    session_id = dict_value['id']
-    print("insert_session() Success and session id: {}".format(session_id))
-else:
-    print("insert_session() failed.  exiting")
-    exit(1)
-    
-returned_tuple = database_runner.delete_session(session_id)
-if True == returned_tuple[0]:
-    dict_value = json.loads(returned_tuple[1])
-    rows = dict_value['rows']
-    print("delete_session({}) Success and rows deleted: {}".format(session_id,rows))
-else:
-    print("delete_session() failed.  exiting")
-    exit(1)
-    
-returned_tuple = database_runner.insert_exercise_definition("tester exercise",1)
-if True == returned_tuple[0]:
-    dict_value = json.loads(returned_tuple[1])
-    exercise_id = dict_value['id']
-    print("insert_exercise_definition('tester exercise',1) Success and id inserted: {}".format(exercise_id))
-else:
-    print("insert_exercise_definition() failed.  exiting")
-    exit(1)
+def delete_exercise_performed_test(after_id):
+    logging.info("Begin")
+    delete_after_id_exercise_performed_entries(after_id)
+    logging.info("End")
 
-returned_tuple = database_runner.delete_exercise_definition(exercise_id)
-if True == returned_tuple[0]:
-    dict_value = json.loads(returned_tuple[1])
-    rows = dict_value['rows']
-    print("database_runner.delete_exercise_definition({}) Success and rows deleted: {}".format(exercise_id,rows))
-else:
-    print("delete_session() failed.  exiting")
-    exit(1)
+
+def get_highest_exercise_performed_id_test():
+    logging.info("Begin")
+    id = get_highest_exercise_performed_entry()[0]
+    logging.info("End Highest id is " + str(id))
+    return id
+
+
+def get_last_exercises_performed_test():
+    logging.info("Begin")
+    rows = get_last_exercises_performed()
+    logging.warning('row count:  %s', len(rows))
+    logging.info("End")
+
+def main():
+    get_common_logger()
+
+    try:
+        logging.info("let's begin")
+
+        highest_id = get_highest_exercise_performed_id_test()
+        insert_exercise_performed_test()
+        delete_exercise_performed_test(highest_id)
+
+        get_last_exercises_performed_test()
+
+
+        logging.info("Finished success")
+    except Exception as e:
+        logging.error("Tests Failed")
+        logging.error(traceback.format_exc())
+
+
+if __name__ == '__main__':
+    main()
