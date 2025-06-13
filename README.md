@@ -1,5 +1,9 @@
 # gym_python
 
+Using PostgresSQL as the DB
+
+Each .py file should call cgi_helper to figure out GET/POST and appropriate parameters
+
 # Basic Config
 ## Exercise Group
 Example:
